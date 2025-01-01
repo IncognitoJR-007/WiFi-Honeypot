@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Packet Logs</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+</head>
+<body>
+    <h1>Packet Logs with Locations</h1>
+    <div id="map" style="height: 500px;"></div>
+    <script>
+        var map = L.map('map').setView([0, 0], 2);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 18,
+        }).addTo(map);
+
+        var markers = [
+            {% for log in logs %}
+            [{{ log[5] }}, {{ log[6] }}, "{{ log[1] }} ({{ log[7] }}, {{ log[8] }})"],
+            {% endfor %}
+        ];
+
+        markers.forEach(function(marker) {
+            L.marker([marker[0], marker[1]]).addTo(map)
+                .bindPopup(marker[2]);
+        });
+    </script>
+</body>
+</html>
